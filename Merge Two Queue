@@ -1,0 +1,113 @@
+public class QueueImpl implements IntQueue {
+
+    protected int capacity;
+    public static final int CAPACITY = 100;
+    protected int Q[];
+    protected int f = 0, r = 0;
+
+    public QueueImpl() {
+        this(CAPACITY);
+    }
+
+    public QueueImpl(int cap) {
+        capacity = cap;
+        Q = new int[capacity];
+    }
+
+
+    public void enqueue(int value) throws Exception {
+        if (getSize() == capacity - 1) {
+            throw new Exception("Full"); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        Q[r] = value;
+
+        r = (r + 1) % capacity;
+
+    }
+
+
+    public int dequeue() throws Exception {
+        int element;
+        if (isEmpty()) {
+            throw new Exception("Empty"); //To change body of generated methods, choose Tools | Templates.
+        }
+        element = Q[f];
+
+        f = (f + 1) % capacity;
+        return element;
+
+    }
+
+
+    public int getSize() {
+        return (capacity - f + r) % capacity;
+    }
+
+
+    public boolean isEmpty() {
+        return (f == r);
+    }
+
+    public String toString() {
+        int z = f;
+        String s;
+        s = "f[";
+
+        if (getSize() >= 1) {
+            s += Q[0];
+            for (int i = 1; i <= getSize() - 1; i++) {
+                s += " " + Q[z + 1];
+                z = (z + 1) % capacity;
+
+            }
+        }
+        return s + "]b";
+    }
+
+}
+My solution: public class Assign2Problem3Solution {
+
+public static IntQueue merge(IntQueue q1, IntQueue q2) throws Exception {
+    IntQueue merged = new QueueImpl();
+    int a, b, k, t, m;
+
+    if (a < b) {
+        k = a;
+        t = b - a;
+    } else {
+        k = b;
+        t = a - b;
+    }
+
+    for (int i = 0; i < k; i++) {
+
+        a = q1.dequeue();
+        b = q2.dequeue();
+        if (a < b) {
+            merged.enqueue(a);
+            merged.enqueue(b);
+        } else if (b < a) {
+            merged.enqueue(b);
+            merged.enqueue(a);
+        }
+
+    }
+    if (q1.getSize() > q2.getSize()) {
+
+        for (int i = 0; i < t; i++) {
+            m = q1.dequeue();
+            merged.enqueue(m);
+
+        }
+    } else if (q1.getSize() < q2.getSize()) {
+        for (int i = 0; i < t; i++) {
+            m = q2.dequeue();
+            merged.enqueue(m);
+
+        }
+    }
+
+    return merged;
+}
+}
